@@ -1,8 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
-import { Camera, CameraType } from 'expo-camera'
+//import { StatusBar } from 'expo-status-bar';
+import { Camera, CameraType } from 'expo-camera';
 import { Button, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
-import * as MediaLibrary from  'expo-media-library'
+import * as MediaLibrary from  'expo-media-library';
 import { useState, useRef, useEffect } from 'react';
+import Constants from 'expo-constants';
 
 
 export default function Camara() {
@@ -20,10 +21,6 @@ export default function Camara() {
     })();
   }, []);
 
-  //function toggleCameraType() {
-    //setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
-  //}
-
   const takePicture = async () => {
     if(cameraRef) {
       try{
@@ -32,6 +29,18 @@ export default function Camara() {
         setImage(data.uri);
       } catch(e) {
         console.log(e);
+      }
+    }
+  }
+
+  const saveImage = async () => {
+    if(image) {
+      try{
+        await MediaLibrary.createAssetAsync(image);
+        console.info('Foto Guardada!')
+        setImage(null);
+      } catch(e) {
+        console.log(e)
       }
     }
   }
@@ -50,6 +59,24 @@ export default function Camara() {
         FlashMode={flash}
         ref ={cameraRef}
         >
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          padding: 30,
+        }}>
+          <Button icon={'retweet'} onPress={() => {
+            setType(type === CameraType.back ? CameraType.front : CameraType.back)
+          }}/>
+
+          <Button icon={'flash'} 
+          color={flash === Camera.Constants.FlashMode.off ? 'gray' : '#f1f1f1'}
+          onPress={() => {
+            setflash(flash === Camera.Constants.FlashMode.off
+              ? Camera.Constants.FlashMode.on
+              : Camera.Constants.FlashMode.off
+              )
+          }}/>
+        </View>    
       </Camera>
       :
       <Image source={{uri: image}} style={styles.camera}></Image>
@@ -59,14 +86,14 @@ export default function Camara() {
         <View style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          paddingHorizontal: 50
+          padding: 50
 
         }}>
             <Button title={"Tomar otra foto"} icon="retweet" onPress={() => setImage(null)}></Button>
-            <Button title={"Guardar la foto"} icon="save"></Button>
+            <Button title={"Guardar la foto"} icon="save" onPress={saveImage}></Button>
         </View> 
         :
-        <Button title={'Tomar foto'} icon="camera" onPress={takePicture}></Button>
+        <Button title={"Tomar foto"} icon="camera" onPress={takePicture}></Button>
         }
         </View>
     </View>
