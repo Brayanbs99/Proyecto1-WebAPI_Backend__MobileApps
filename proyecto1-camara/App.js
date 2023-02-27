@@ -7,12 +7,14 @@ import Constants from 'expo-constants';
 
 
 export default function Camara() {
+  //Constatntes que se van a utilizar en el proyecto
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [image, setImage] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [flash, setflash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
 
+  //Permisos de poder acceder a las imagenes del dispositivo.
   useEffect(() => {
     (async () => {
       MediaLibrary.requestPermissionsAsync();
@@ -21,6 +23,7 @@ export default function Camara() {
     })();
   }, []);
 
+  //Aquí esta el código donde se va a tomar la foto
   const takePicture = async () => {
     if(cameraRef) {
       try{
@@ -32,7 +35,7 @@ export default function Camara() {
       }
     }
   }
-
+//Aquí esta el código donde se va a guardar la foto en la galeria del dispositivo.
   const saveImage = async () => {
     if(image) {
       try{
@@ -44,12 +47,11 @@ export default function Camara() {
       }
     }
   }
-
+  //Permiso a acceder la cámara.
   if(hasCameraPermission === false) {
     return <Text> No tiene acceso a la cámara.</Text>
   }
 
-  
   return (
     <View style={styles.container}>
       {!image ?
@@ -59,24 +61,31 @@ export default function Camara() {
         FlashMode={flash}
         ref ={cameraRef}
         >
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          padding: 30,
-        }}>
-          <Button icon={'retweet'} onPress={() => {
-            setType(type === CameraType.back ? CameraType.front : CameraType.back)
-          }}/>
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            padding: 30,
+          }}>
+            
+            <Button title="Volver" icon="retweet"
+              onPress={() => {
+                setType(
+                  type === CameraType.back ? CameraType.front : CameraType.back
+                );
+              }}
+            />
 
-          <Button icon={'flash'} 
-          color={flash === Camera.Constants.FlashMode.off ? 'gray' : '#f1f1f1'}
-          onPress={() => {
-            setflash(flash === Camera.Constants.FlashMode.off
-              ? Camera.Constants.FlashMode.on
-              : Camera.Constants.FlashMode.off
-              )
-          }}/>
-        </View>    
+            <Button title='Flash' 
+            onPress={() => 
+              setflash(flash === Camera.Constants.FlashMode.off
+                ? Camera.Constants.FlashMode.on
+                : Camera.Constants.FlashMode.off
+                )
+            }
+            icon={'flash'} 
+            color={flash === Camera.Constants.FlashMode.off ? 'gray' : '#f1f1f1'}
+            />
+          </View>    
       </Camera>
       :
       <Image source={{uri: image}} style={styles.camera}></Image>
