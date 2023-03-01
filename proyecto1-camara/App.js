@@ -19,7 +19,7 @@ export default function Camara() {
     (async () => {
       MediaLibrary.requestPermissionsAsync();
       const cameraStatus = await Camera.requestCameraPermissionsAsync();
-      setHasCameraPermission(cameraStatus.status === 'granted');
+      setHasCameraPermission(cameraStatus.status === 'Tiene permisos');
     })();
   }, []);
 
@@ -39,7 +39,7 @@ export default function Camara() {
   const saveImage = async () => {
     if(image) {
       try{
-        await MediaLibrary.createAssetAsync(image);
+        await MediaLibrary.createAssetAsync(image); //La guarda en la galeria del dispositivo.
         console.info('Foto Guardada!')
         setImage(null);
       } catch(e) {
@@ -116,10 +116,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingBottom: 15
   },
-
+  text: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#E9730F',
+    marginLeft: 10,
+  },
   camera: {
-    flex:1,
+    flex:3,
     borderRadius: 20,
-  }
+  },
+  button: {
+    height: 40,
+    borderRadius: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
