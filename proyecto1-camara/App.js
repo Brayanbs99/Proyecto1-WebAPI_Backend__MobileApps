@@ -4,6 +4,8 @@ import { Button, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-n
 import * as MediaLibrary from  'expo-media-library';
 import { useState, useRef, useEffect } from 'react';
 import Constants from 'expo-constants';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 
 
 export default function Camara() {
@@ -47,10 +49,11 @@ export default function Camara() {
       }
     }
   }
+  //Lo tuve que quitar para ver la cámara funcional
   //Permiso a acceder la cámara.
-  if(hasCameraPermission === false) {
-    return <Text> No tiene acceso a la cámara.</Text>
-  }
+  //if(hasCameraPermission === false) {
+    //return <Text> No tiene acceso a la cámara.</Text>
+ // }/
 
   return (
     <View style={styles.container}>
@@ -105,7 +108,9 @@ export default function Camara() {
         <Button title={"Tomar foto"} icon="camera" onPress={takePicture}></Button>
         }
         </View>
+
     </View>
+    
   );
 }
 
